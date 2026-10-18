@@ -1,1 +1,439 @@
-<h1>Hello World</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>alex-bre — Apps</title>
+    <meta name="description" content="A collection of browser-based creative tools by alex-bre: Lulogo and pearspective." />
+    <meta property="og:title" content="alex-bre — Apps" />
+    <meta property="og:description" content="A collection of browser-based creative tools." />
+    <meta property="og:url" content="https://alex-bre.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#f4f3ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161713" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Resolve the theme before first paint: an explicit choice if one was
+         made, else the OS preference. -->
+    <script>
+      try {
+        var t = localStorage.getItem('home.theme')
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t)
+      } catch (e) {
+        /* storage blocked: fall back to the OS preference via CSS */
+      }
+    </script>
+    <style>
+      :root {
+        --bg: #f4f3ee;
+        --panel: #ffffff;
+        --border: #e4e2d9;
+        --border-strong: #d2cfc3;
+        --text: #1c1d17;
+        --text-muted: #686a5d;
+        --text-faint: #9b9c8f;
+        --accent: #5f7d17;
+        --accent-soft: #eef3da;
+        --shadow: 0 1px 2px rgba(28, 29, 23, 0.04), 0 8px 24px -12px rgba(28, 29, 23, 0.12);
+        --shadow-hover: 0 2px 4px rgba(28, 29, 23, 0.05), 0 18px 40px -16px rgba(28, 29, 23, 0.22);
+        --grid: rgba(28, 29, 23, 0.045);
+        color-scheme: light;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #161713;
+          --panel: #1e1f1a;
+          --border: #32342b;
+          --border-strong: #43463a;
+          --text: #eaeae2;
+          --text-muted: #a3a597;
+          --text-faint: #6e7064;
+          --accent: #b3cd4c;
+          --accent-soft: #333b18;
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+          --shadow-hover: 0 18px 40px -16px rgba(0, 0, 0, 0.6);
+          --grid: rgba(234, 234, 226, 0.035);
+          color-scheme: dark;
+        }
+      }
+      :root[data-theme='dark'] {
+        --bg: #161713;
+        --panel: #1e1f1a;
+        --border: #32342b;
+        --border-strong: #43463a;
+        --text: #eaeae2;
+        --text-muted: #a3a597;
+        --text-faint: #6e7064;
+        --accent: #b3cd4c;
+        --accent-soft: #333b18;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-hover: 0 18px 40px -16px rgba(0, 0, 0, 0.6);
+        --grid: rgba(234, 234, 226, 0.035);
+        color-scheme: dark;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--bg);
+        background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 32px 32px;
+        background-position: center top;
+        color: var(--text);
+        font-family: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 16px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
+
+      /* Header */
+      header {
+        padding: 24px 0;
+      }
+      header .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand-mark {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--accent);
+      }
+      .theme-toggle {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text-muted);
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: color 0.15s, border-color 0.15s;
+      }
+      .theme-toggle:hover {
+        color: var(--text);
+        border-color: var(--border-strong);
+      }
+      .theme-toggle svg {
+        width: 18px;
+        height: 18px;
+      }
+      .icon-sun {
+        display: none;
+      }
+      :root[data-theme='dark'] .icon-sun {
+        display: block;
+      }
+      :root[data-theme='dark'] .icon-moon {
+        display: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) .icon-sun {
+          display: block;
+        }
+        :root:not([data-theme='light']) .icon-moon {
+          display: none;
+        }
+      }
+
+      /* Hero */
+      main {
+        flex: 1;
+      }
+      .hero {
+        padding: 72px 0 48px;
+      }
+      .eyebrow {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 16px;
+      }
+      h1 {
+        font-size: clamp(36px, 6vw, 56px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        font-weight: 600;
+        margin: 0 0 20px;
+        max-width: 16ch;
+      }
+      .lede {
+        font-size: 18px;
+        color: var(--text-muted);
+        max-width: 52ch;
+        margin: 0;
+      }
+
+      /* App cards */
+      .apps {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: 20px;
+        padding-bottom: 96px;
+      }
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 28px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--border-strong);
+      }
+      .card:focus-visible {
+        border-radius: 18px;
+      }
+      .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .app-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: var(--accent-soft);
+        display: grid;
+        place-items: center;
+      }
+      .app-icon svg {
+        width: 34px;
+        height: 34px;
+      }
+      .arrow {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        display: grid;
+        place-items: center;
+        color: var(--text-muted);
+        transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+      }
+      .arrow svg {
+        width: 16px;
+        height: 16px;
+      }
+      .card:hover .arrow {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--panel);
+        transform: rotate(-45deg);
+      }
+      .card h2 {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0 0 4px;
+      }
+      .tag {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 12px;
+        color: var(--text-faint);
+        margin: 0 0 12px;
+      }
+      .card p.desc {
+        color: var(--text-muted);
+        margin: 0;
+      }
+      .card-url {
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 12px;
+        color: var(--text-faint);
+        overflow-wrap: anywhere;
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 24px 0;
+        font-size: 14px;
+        color: var(--text-faint);
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+      }
+      footer a {
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      footer a:hover {
+        color: var(--text);
+      }
+
+      @media (max-width: 600px) {
+        .wrap {
+          padding: 0 16px;
+        }
+        .hero {
+          padding: 40px 0 32px;
+        }
+        .card {
+          padding: 22px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"></span>alex-bre</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap">
+          <p class="eyebrow">Apps</p>
+          <h1>Browser-based tools</h1>
+          <p class="lede">
+            Collection of creative workspaces. No installs, no accounts.
+          </p>
+        </div>
+      </section>
+
+      <section class="wrap" aria-label="Apps">
+        <div class="apps">
+          <!-- To add an app, copy one <a class="card"> block and update its link, icon and text. -->
+          <a class="card" href="https://alex-bre.github.io/lulogo/">
+            <div class="card-top">
+              <div class="app-icon" aria-hidden="true">
+                <svg viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="#e0662e" />
+                  <circle cx="22" cy="22" r="16" fill="#f2dca2" />
+                  <circle cx="22" cy="22" r="2" fill="#d9a93f" />
+                  <path d="M 19.038 22.582 C 19.273 23.782 20.218 24.727 21.418 24.962 L 20.581 35 C 14.493 34.343 9.657 29.507 9 23.419 Z M 22.582 24.962 C 23.782 24.727 24.727 23.782 24.962 22.582 L 35 23.419 C 34.343 29.507 29.507 34.343 23.419 35 Z M 24.962 21.418 C 24.727 20.218 23.782 19.273 22.582 19.038 L 23.419 9 C 29.507 9.657 34.343 14.493 35 20.581 Z M 21.418 19.038 C 20.218 19.273 19.273 20.218 19.038 21.418 L 9 20.581 C 9.657 14.493 14.493 9.657 20.581 9 Z" fill="#8ca338" />
+                </svg>
+              </div>
+              <span class="arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </div>
+            <div>
+              <h2>Lulogo</h2>
+              <p class="tag">Vector workspace</p>
+              <p class="desc">Design vector artwork with an infinite canvas.</p>
+            </div>
+            <div class="card-url">alex-bre.github.io/lulogo</div>
+          </a>
+
+          <a class="card" href="https://alex-bre.github.io/pearspective/">
+            <div class="card-top">
+              <div class="app-icon" aria-hidden="true">
+                <svg viewBox="0 0 26 26">
+                  <rect x="12.2" y="1" width="1.6" height="5.5" rx="0.8" fill="#5f7d2b" />
+                  <ellipse cx="17.2" cy="4.2" rx="3.6" ry="1.6" transform="rotate(-25 17.2 4.2)" fill="#5f7d2b" />
+                  <circle cx="13" cy="10.8" r="5" fill="#a9c43f" />
+                  <circle cx="13" cy="17.6" r="7.4" fill="#a9c43f" />
+                </svg>
+              </div>
+              <span class="arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </div>
+            <div>
+              <h2>pearspective</h2>
+              <p class="tag">3D workspace</p>
+              <p class="desc">Build and explore 3D scenes.</p>
+            </div>
+            <div class="card-url">alex-bre.github.io/pearspective</div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>&copy; <span id="year">2026</span> alex-bre</span>
+        <a href="https://github.com/alex-bre">GitHub</a>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear()
+
+      document.querySelector('.theme-toggle').addEventListener('click', function () {
+        var root = document.documentElement
+        var current = root.getAttribute('data-theme')
+        if (current !== 'light' && current !== 'dark')
+          current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        var next = current === 'dark' ? 'light' : 'dark'
+        root.setAttribute('data-theme', next)
+        try {
+          localStorage.setItem('home.theme', next)
+        } catch (e) {
+          /* storage blocked: the choice lasts for this visit only */
+        }
+      })
+    </script>
+  </body>
+</html>
